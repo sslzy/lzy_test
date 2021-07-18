@@ -41,25 +41,27 @@ def review(path):
     if suffix not in ['xlsx','xls']:
         error_dict['suffix'].append('文件后缀错误')
 
+
     # 判断文件前缀是否正确。错误则返回
     if prefix in ['left_actions','right_actions','right_tools','left_tools','phases','special_events']:
         error_dict['prefix'] = []
 
         # 通过文件前缀返回不同的标签字典
         if prefix in ['left_actions','right_actions']:
-            review = action_dict
+            review = ACTION_DICT
         if prefix in  ['right_tools','left_tools']:
-            review = tools_dict
+            review = TOOL_DICT
         if prefix == 'phases':
-            review = phases_dict
+            review = PHASE_DICT
         if prefix == 'special_events':
-            review = special_events_dict
+            review = SPECIAL_EVENT_DICT
     else:
         error_dict['prefix'].append('文件前缀错误')
 
     # print('error_dict',error_dict)
     # 判断内容格式是否正确，前置条件：文件前缀和文件格式正确
-    if error_dict['prefix'] == [] and error_dict['suffix'] == []:
+    if not error_dict['prefix'] and not error_dict['suffix']:
+    # if error_dict['prefix'] == [] and error_dict['suffix'] == []:
         wb = xlrd.open_workbook(path)
         sheet = wb.sheet_by_name('填写')
         start_times = sheet.col_values(0)
@@ -99,7 +101,7 @@ def review(path):
     return error_list
 
 if __name__ == '__main__':
-    action_dict = {
+    ACTION_DICT = {
         1: "钩",
         2: "电勾激发",
         3: "无效钩",
@@ -118,13 +120,13 @@ if __name__ == '__main__':
         16: "无效夹",
         17: "穿刺",
     }
-    special_events_dict = {
+    SPECIAL_EVENT_DICT = {
         1: "夹胆囊管",
         2: "夹胆囊动脉",
         3: "离断胆囊管",
         4: "离断胆囊动脉",
     }
-    phases_dict = {
+    PHASE_DICT = {
         1: "抓取胆囊",
         2: "建立气腹",
         3: "分离粘连",
@@ -132,7 +134,7 @@ if __name__ == '__main__':
         5: "分离胆囊床",
         6: "清理术野"
     }
-    tools_dict = {
+    TOOL_DICT = {
         1: "戳卡",
         2: "无损伤抓钳",
         3: "电勾",
@@ -158,8 +160,8 @@ if __name__ == '__main__':
 
     # excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\right_actions.xlsx'
     # excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\excel_model-v2\phases.xlsx'
-    excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\excel_model-v2\right_tools.xlsx'
-    # excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\test_for_label\right_actions.xlsx'
+    # excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\excel_model-v2\right_tools.xlsx'
+    excel_path = r'E:\withai_document\视频管理\LC10000\手术标签脚本\test_for_label\right_actions.xlsx'
 
     check_message = review(path=excel_path)
     print(check_message)
